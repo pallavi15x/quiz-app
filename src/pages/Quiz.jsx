@@ -56,6 +56,8 @@ function Quiz() {
       </motion.div>
     </div>
   );
+
+  
 }
 
 export default Quiz;
