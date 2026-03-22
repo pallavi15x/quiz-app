@@ -19,7 +19,7 @@ const questions = [
     difficulty: "easy"
   },
   {
-    
+  
     id: 3,
     question: "What does CSS stand for?",
     options: [
