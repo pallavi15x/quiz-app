@@ -17,7 +17,15 @@ function Result() {
   };
 
   // 🏆 Save score
-  localStorage.setItem("latestScore", score);
+  const previousScores = JSON.parse(localStorage.getItem("scores")) || [];
+
+const newScores = [...previousScores, score];
+
+// sort highest first
+newScores.sort((a, b) => b - a);
+
+// keep top 5
+localStorage.setItem("scores", JSON.stringify(newScores.slice(0, 5)));
 
   return (
     <div className="flex items-center justify-center h-screen bg-gradient-to-r from-green-400 to-blue-500">
@@ -48,6 +56,12 @@ function Result() {
         >
           Play Again
         </button>
+        <button
+  onClick={() => navigate("/leaderboard")}
+  className="mt-2 bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded"
+>
+  View Leaderboard 🏆
+</button>
 
       </div>
     </div>
