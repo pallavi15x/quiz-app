@@ -17,6 +17,8 @@ function Quiz() {
   const [time, setTime] = useState(15);
   const [selected, setSelected] = useState(null);
 
+  
+
   const navigate = useNavigate();
 
   // ⏱️ Timer logic

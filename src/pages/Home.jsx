@@ -30,6 +30,7 @@ function Home() {
           onClick={() => navigate("/quiz", { state: { level: "easy" } })}
           className="bg-green-400 text-black px-6 py-3 rounded-lg font-semibold shadow-lg"
         >
+            
           Easy 😊
         </motion.button>
 
