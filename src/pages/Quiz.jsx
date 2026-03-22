@@ -8,6 +8,11 @@ function Quiz() {
   const [score, setScore] = useState(0);
   const [time, setTime] = useState(15);
   const [selected, setSelected] = useState(null);
+  const correctSound = new Audio("/correct.mp3");
+correctSound.volume = 0.7;
+
+const wrongSound = new Audio("/wrong.mp3");
+wrongSound.volume = 0.7;
 
   const navigate = useNavigate();
 
@@ -37,10 +42,12 @@ function Quiz() {
   const handleAnswer = (option) => {
     setSelected(option);
 
-    if (option === questions[current].answer) {
-      setScore((prev) => prev + 1); // better way
-    }
-
+ if (option === questions[current].answer) {
+  setScore((prev) => prev + 1);
+  correctSound.play(); // 🎉 correct sound
+} else {
+  wrongSound.play(); // 😢 wrong sound
+}
     setTimeout(() => {
       handleNext();
     }, 1000);
