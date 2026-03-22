@@ -1,18 +1,21 @@
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import questions from "../data/questions";
+import allQuestions from "../data/questions";
+
+// 🎯 Random questions
+const questions = [...allQuestions]
+  .sort(() => 0.5 - Math.random())
+  .slice(0, 10);
 
 function Quiz() {
+  const location = useLocation();
+  const level = location.state?.level || "easy";
+
   const [current, setCurrent] = useState(0);
   const [score, setScore] = useState(0);
   const [time, setTime] = useState(15);
   const [selected, setSelected] = useState(null);
-  const correctSound = new Audio("/correct.mp3");
-correctSound.volume = 0.7;
-
-const wrongSound = new Audio("/wrong.mp3");
-wrongSound.volume = 0.7;
 
   const navigate = useNavigate();
 
@@ -24,14 +27,14 @@ wrongSound.volume = 0.7;
     } else {
       handleNext();
     }
-  }, [time]);
+  }, [time, current]);
 
   // 👉 Next question
   const handleNext = () => {
     setSelected(null);
 
     if (current < questions.length - 1) {
-      setCurrent(current + 1);
+      setCurrent((prev) => prev + 1);
       setTime(15);
     } else {
       navigate("/result", { state: { score } });
@@ -40,14 +43,14 @@ wrongSound.volume = 0.7;
 
   // 👉 Answer click
   const handleAnswer = (option) => {
+    if (selected !== null) return; // 🚫 prevent double click
+
     setSelected(option);
 
- if (option === questions[current].answer) {
-  setScore((prev) => prev + 1);
-  correctSound.play(); // 🎉 correct sound
-} else {
-  wrongSound.play(); // 😢 wrong sound
-}
+    if (option === questions[current].answer) {
+      setScore((prev) => prev + 1);
+    }
+
     setTimeout(() => {
       handleNext();
     }, 1000);
@@ -63,12 +66,19 @@ wrongSound.volume = 0.7;
         className="bg-white p-4 sm:p-6 rounded-xl shadow-lg w-full max-w-md text-center"
       >
 
+        {/* 🎯 Level */}
+        <p className="text-xs text-gray-500 mb-1">
+          Level: {level.toUpperCase()}
+        </p>
+
         {/* ⏱️ Timer */}
-        <p className="text-red-500 font-bold mb-2 text-sm sm:text-base">
+        <p className={`font-bold mb-2 text-sm sm:text-base ${
+          time <= 5 ? "text-red-700 animate-pulse" : "text-red-500"
+        }`}>
           Time Left: {time}s
         </p>
 
-        {/* 📊 Progress Bar */}
+        {/* 📊 Progress */}
         <div className="w-full bg-gray-200 h-2 mb-4 rounded">
           <div
             className="bg-green-500 h-2 rounded transition-all duration-500"
@@ -77,6 +87,11 @@ wrongSound.volume = 0.7;
             }}
           ></div>
         </div>
+
+        {/* 🔥 Score */}
+        <p className="text-sm font-bold mb-1">
+          Score: {score}
+        </p>
 
         {/* Question count */}
         <p className="text-xs sm:text-sm text-gray-500 mb-2">
@@ -109,6 +124,14 @@ wrongSound.volume = 0.7;
             {opt}
           </button>
         ))}
+
+        {/* ⏭️ Skip Button */}
+        <button
+          onClick={handleNext}
+          className="mt-3 bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-800"
+        >
+          Skip ⏭️
+        </button>
 
       </motion.div>
     </div>

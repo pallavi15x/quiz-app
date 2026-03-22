@@ -2,40 +2,23 @@ import { useNavigate } from "react-router-dom";
 
 function Leaderboard() {
   const navigate = useNavigate();
-
   const scores = JSON.parse(localStorage.getItem("scores")) || [];
 
   return (
-    <div className="flex items-center justify-center min-h-screen px-4 bg-gradient-to-r from-yellow-400 to-red-500">
-      
-      <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md text-center">
-        
-        <h1 className="text-2xl font-bold mb-4">🏆 Leaderboard</h1>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white text-center">
 
-        {scores.length === 0 ? (
-          <p>No scores yet</p>
-        ) : (
-          <ul>
-            {scores.map((s, index) => (
-              <li
-                key={index}
-                className="bg-gray-100 p-2 mb-2 rounded flex justify-between"
-              >
-                <span>#{index + 1}</span>
-                <span>{s}</span>
-              </li>
-            ))}
-          </ul>
-        )}
+      <h1 className="text-3xl font-bold mb-4">🏆 Leaderboard</h1>
 
-        <button
-          onClick={() => navigate("/")}
-          className="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
-        >
-          Back to Home
-        </button>
+      {scores.map((s, i) => (
+        <p key={i}>{i + 1}. {s}</p>
+      ))}
 
-      </div>
+      <button
+        onClick={() => navigate("/")}
+        className="mt-6 bg-white text-black px-6 py-2 rounded"
+      >
+        Back
+      </button>
     </div>
   );
 }
